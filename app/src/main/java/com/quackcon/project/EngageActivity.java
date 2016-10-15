@@ -27,4 +27,9 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
                                         AndroidSchedulers.mainThread());
         presenter.initializeDataStreams();
     }
+
+    @Override
+    public void vibrate(int intensity) {
+
+    }
 }

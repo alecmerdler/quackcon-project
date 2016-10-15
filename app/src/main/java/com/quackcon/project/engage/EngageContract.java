@@ -8,6 +8,7 @@ public interface EngageContract {
 
     interface View {
 
+        void vibrate(int intensity);
     }
 
     interface Presenter {

@@ -3,9 +3,6 @@ package com.quackcon.project.engage;
 import com.quackcon.project.models.SensorData;
 import com.quackcon.project.services.SensorDataService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import rx.Scheduler;
 
 /**
@@ -13,9 +10,6 @@ import rx.Scheduler;
  */
 
 public class EngagePresenter implements EngageContract.Presenter {
-
-    // FIXME: Testing
-    private List<SensorData> dataList = new ArrayList<>();
 
     private final EngageContract.View view;
     private final SensorDataService sensorDataService;
@@ -37,7 +31,7 @@ public class EngagePresenter implements EngageContract.Presenter {
                 .subscribeOn(ioScheduler)
                 .observeOn(mainThreadScheduler)
                 .subscribe((SensorData sensorData) -> {
-                    dataList.add(sensorData);
+                    view.vibrate(sensorData.getIntensity());
                 });
     }
 }

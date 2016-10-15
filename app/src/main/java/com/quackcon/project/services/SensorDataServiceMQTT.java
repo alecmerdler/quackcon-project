@@ -82,10 +82,14 @@ public class SensorDataServiceMQTT implements SensorDataService {
         }
 
         @Override
-        public void messageArrived(String topic, MqttMessage message) throws Exception {
-            byte[] bytes = message.getPayload();
-            SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-            subscriber.onNext(sensorData);
+        public void messageArrived(String topic, MqttMessage message) {
+            try {
+                byte[] bytes = message.getPayload();
+                SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
+                subscriber.onNext(sensorData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
