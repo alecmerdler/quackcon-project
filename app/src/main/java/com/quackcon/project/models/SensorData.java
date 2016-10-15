@@ -8,16 +8,14 @@ public class SensorData {
 
     private Long id;
     private int intensity;
-    private int duration;
 
     public SensorData() {
 
     }
 
-    public SensorData(Long id, int intensity, int duration) {
+    public SensorData(Long id, int intensity) {
         this.id = id;
         this.intensity = intensity;
-        this.duration = duration;
     }
 
     public Long getId() {
@@ -34,13 +32,5 @@ public class SensorData {
 
     public void setIntensity(int intensity) {
         this.intensity = intensity;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 }
