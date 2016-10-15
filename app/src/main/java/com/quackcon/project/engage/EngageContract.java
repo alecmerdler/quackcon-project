@@ -12,5 +12,6 @@ public interface EngageContract {
 
     interface Presenter {
 
+        void initializeDataStreams();
     }
 }
