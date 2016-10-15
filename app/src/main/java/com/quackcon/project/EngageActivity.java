@@ -1,8 +1,9 @@
 package com.quackcon.project;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 
 import com.quackcon.project.engage.EngageContract;
 import com.quackcon.project.engage.EngagePresenter;
@@ -30,6 +31,9 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
 
     @Override
     public void vibrate(int intensity) {
+        Vibrator mVib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        final int lclIntnsty = intensity *= 10;
+        mVib.vibrate(new long[] {(100 - lclIntnsty), lclIntnsty}, -1);
     }
 }
