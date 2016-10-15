@@ -22,7 +22,7 @@ import rx.Subscriber;
 
 public class SensorDataServiceMQTT implements SensorDataService {
 
-    private final String brokerUrl = "tcp://45.79.9.205:10210";
+    private final String brokerUrl = "tcp://52.25.184.170:1883";
     private final String sensorDataTopic = "sensorData";
     private String clientId = UUID.randomUUID().toString();
     private IMqttClient client;
