@@ -21,7 +21,7 @@ import rx.Subscriber;
 
 public class SensorDataServiceMQTT implements SensorDataService {
 
-    private final String brokerUrl = "http://localhost:1883";
+    private final String brokerUrl = "localhost:1883";
     private final String sensorDataTopic = "sensorData";
     private String clientId = UUID.randomUUID().toString();
     private IMqttClient client;
@@ -79,6 +79,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
 
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
+            byte[] bytes = message.getPayload();
             SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
             subscriber.onNext(sensorData);
         }

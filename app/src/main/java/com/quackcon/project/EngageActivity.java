@@ -11,7 +11,7 @@ import com.quackcon.project.services.SensorDataServiceMQTT;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements EngageContract.View {
+public class EngageActivity extends AppCompatActivity implements EngageContract.View {
 
     private Context context;
     private EngageContract.Presenter presenter;
