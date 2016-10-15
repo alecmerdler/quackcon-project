@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.UUID;
 
@@ -21,19 +22,22 @@ import rx.Subscriber;
 
 public class SensorDataServiceMQTT implements SensorDataService {
 
-    private final String brokerUrl = "http://localhost:1883";
+    private final String brokerUrl = "tcp://45.79.9.205:10210";
     private final String sensorDataTopic = "sensorData";
     private String clientId = UUID.randomUUID().toString();
     private IMqttClient client;
+    private MemoryPersistence persistence;
 
     // TODO: Dependency injection
-    public SensorDataServiceMQTT(IMqttClient client) {
+    public SensorDataServiceMQTT(IMqttClient client, MemoryPersistence persistence) {
         this.client = client;
+        this.persistence = persistence;
     }
 
     public SensorDataServiceMQTT() {
+        this.persistence = new MemoryPersistence();
         try {
-            this.client = new MqttClient(brokerUrl, this.clientId);
+            this.client = new MqttClient(brokerUrl, clientId, persistence);
         } catch (MqttException me) {
             me.printStackTrace();
         }
@@ -42,14 +46,14 @@ public class SensorDataServiceMQTT implements SensorDataService {
     public rx.Observable<SensorData> getAllSensorData() {
 //            return Observable.defer(() -> {
 //                try {
-//                    client.setCallback(new SubscribeCallback());
+//                    client.setCallback(new SubscribeCallback(subscriber));
 //                    client.connect();
 //                    client.subscribe(sensorDataTopic + "/#");
 //                } catch (MqttException me) {
 //
 //                }
 //
-//                return Observable.just()
+//                return Observable.just(null);
 //            });
         return Observable.create((Subscriber<? super SensorData> subscriber) -> {
                 try {
@@ -59,7 +63,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
                 } catch (MqttException me) {
                     me.printStackTrace();
                 }
-            }).publish();
+            });
     }
 
     private class SubscribeCallback implements MqttCallback {
@@ -78,9 +82,14 @@ public class SensorDataServiceMQTT implements SensorDataService {
         }
 
         @Override
-        public void messageArrived(String topic, MqttMessage message) throws Exception {
-            SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-            subscriber.onNext(sensorData);
+        public void messageArrived(String topic, MqttMessage message) {
+            try {
+                byte[] bytes = message.getPayload();
+                SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
+                subscriber.onNext(sensorData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
