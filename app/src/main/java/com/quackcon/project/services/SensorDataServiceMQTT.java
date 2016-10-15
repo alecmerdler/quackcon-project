@@ -44,17 +44,6 @@ public class SensorDataServiceMQTT implements SensorDataService {
     }
 
     public rx.Observable<SensorData> getAllSensorData() {
-//            return Observable.defer(() -> {
-//                try {
-//                    client.setCallback(new SubscribeCallback(subscriber));
-//                    client.connect();
-//                    client.subscribe(sensorDataTopic + "/#");
-//                } catch (MqttException me) {
-//
-//                }
-//
-//                return Observable.just(null);
-//            });
         return Observable.create((Subscriber<? super SensorData> subscriber) -> {
                 try {
                     client.setCallback(new SubscribeCallback(subscriber));
