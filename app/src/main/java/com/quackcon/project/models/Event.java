@@ -12,6 +12,7 @@ public class Event {
     private URL previewImageUrl;
     private String name;
 
+
     public Event(Long id, URL previewImageUrl, String name) {
         this.id = id;
         this.previewImageUrl = previewImageUrl;

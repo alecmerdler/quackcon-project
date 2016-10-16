@@ -33,6 +33,4 @@ public class SensorData {
     public void setEventType(int eventType) {
         this.eventType = eventType;
     }
-
-    public
 }

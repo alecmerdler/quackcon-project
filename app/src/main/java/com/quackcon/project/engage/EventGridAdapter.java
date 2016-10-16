@@ -33,7 +33,8 @@ public class EventGridAdapter extends ArrayAdapter<Event> {
         } else {
             imageView = (ImageView) convertView;
         }
-
+        imageView.setContentDescription(getItem(position).getName());
+        
         return retrievePreviewImage(imageView, getItem(position));
     }
 
