@@ -74,7 +74,6 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     }
 
     private void messagePebble(int eventType) {
-
         PebbleDictionary dictionary = new PebbleDictionary();
         dictionary.addInt32(0, eventType);
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
@@ -82,42 +81,24 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
 
     private void enableDialog(CharSequence[] options) {
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setMultiChoiceItems(options, new boolean[options.length], new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
-            }
-        });
-
-        adb.setNegativeButton("Cancel", null);
-        adb.setTitle("Selection");
-        adb.setPositiveButton("Okay", null);
-        adb.show();
-
+        adb.setMultiChoiceItems(options, new boolean[options.length], (DialogInterface dialog, int which, boolean isChecked) -> {});
+        adb.setNegativeButton("Cancel", null)
+            .setTitle("Selection")
+            .setPositiveButton("Okay", null)
+            .show();
     }
 
     private void setEventListeners() {
         isPhoneEnabled = true;
         isPebbleEnabled = true;
         boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
-        if(!connected) {
+        if (!connected) {
             isPebbleEnabled = false;
             togglePebble.setClickable(false);
-            Context context = getApplicationContext();
-            CharSequence text = "Pebble connect not available";
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            Toast.makeText(getApplicationContext(), "Pebble connect not available", Toast.LENGTH_LONG).show();
         }
-        else
-        {
-            Context context = getApplicationContext();
-            CharSequence text = "Pebble connection available";
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+        else {
+            Toast.makeText(getApplicationContext(), "Pebble connection available", Toast.LENGTH_LONG).show();
         }
         togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPebbleEnabled = isChecked;
@@ -125,11 +106,8 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         togglePhone.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPhoneEnabled = isChecked;
         });
-        eventGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                switch (position){
+        eventGridView.setOnItemClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+                switch (position) {
                     case 0:
                         enableDialog(new CharSequence[] {"Batting", "Catching", "Home Runs"});
                         break;
@@ -143,15 +121,6 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
                         enableDialog(new CharSequence[] {"Scoring", "Goal Post"});
                         break;
                 }
-
-
-
-
-
-                //   parent.getItemAtPosition(position);
-                // DO something
-
-            }
         });
     }
 

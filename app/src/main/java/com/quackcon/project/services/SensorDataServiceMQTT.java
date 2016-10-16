@@ -28,7 +28,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
     private IMqttClient client;
     private MemoryPersistence persistence;
 
-    // TODO: Dependency injection
+    // TODO: Use dependency injection
     public SensorDataServiceMQTT(IMqttClient client, MemoryPersistence persistence) {
         this.client = client;
         this.persistence = persistence;
