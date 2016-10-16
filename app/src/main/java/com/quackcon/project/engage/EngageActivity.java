@@ -74,7 +74,7 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     }
 
     private void messagePebble(int eventType) {
-        boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
+
         PebbleDictionary dictionary = new PebbleDictionary();
         dictionary.addInt32(0, eventType);
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
@@ -91,12 +91,34 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
 
         adb.setNegativeButton("Cancel", null);
         adb.setTitle("Selection");
+        adb.setPositiveButton("Okay", null);
         adb.show();
+
     }
 
     private void setEventListeners() {
         isPhoneEnabled = true;
         isPebbleEnabled = true;
+        boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
+        if(!connected) {
+            isPebbleEnabled = false;
+            togglePebble.setClickable(false);
+            Context context = getApplicationContext();
+            CharSequence text = "Pebble connect not available";
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+        else
+        {
+            Context context = getApplicationContext();
+            CharSequence text = "Pebble connection available";
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
         togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPebbleEnabled = isChecked;
         });
