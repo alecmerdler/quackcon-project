@@ -4,13 +4,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.GridView;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.quackcon.project.engage.EngageContract;
 import com.quackcon.project.engage.EngagePresenter;
+import com.quackcon.project.engage.EventGridAdapter;
+import com.quackcon.project.models.Event;
+import com.quackcon.project.services.EventServiceMock;
 import com.quackcon.project.services.SensorDataServiceMQTT;
 
+import java.util.List;
 import java.util.UUID;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,23 +25,32 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
 
     private Context context;
     private EngageContract.Presenter presenter;
+    private GridView eventGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        eventGridView = (GridView) findViewById(R.id.events_gridview);
         context = this;
         presenter = new EngagePresenter(this,
                                         new SensorDataServiceMQTT(),
+                                        new EventServiceMock(),
                                         Schedulers.io(),
                                         AndroidSchedulers.mainThread());
         presenter.initializeDataStreams();
+        presenter.loadEvents();
+    }
+
+    @Override
+    public void showEvents(List<Event> events) {
+        eventGridView.setAdapter(new EventGridAdapter(context, events));
     }
 
     @Override
     public void vibrate(int intensity) {
-        Vibrator mVib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        mVib.vibrate(new long[] {0, 500}, -1);
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(new long[] {0, 500}, -1);
         messagePebble();
     }
 
