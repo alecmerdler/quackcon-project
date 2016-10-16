@@ -10,8 +10,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.quackcon.project.EngageActivity">
 
-    <TextView
+    <GridView
+        android:id="@+id/events_gridview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_height="350dp"
+        android:numColumns="2"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth" />
+
+    <Switch
+        android:id="@+id/toggle_vibrate_pebble"
+        android:text="@string/toggle_vibrate_pebble"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/events_gridview"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp" />
+
+    <Switch
+        android:id="@+id/toggle_vibrate_phone"
+        android:text="@string/toggle_vibrate_phone"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/toggle_vibrate_pebble"
+        android:layout_marginTop="19dp"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

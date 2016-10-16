@@ -7,7 +7,7 @@ package com.quackcon.project.models;
 public class SensorData {
 
     private Long id;
-    private int intensity;
+    private int eventType;
 
     public SensorData() {
 
@@ -15,7 +15,7 @@ public class SensorData {
 
     public SensorData(Long id, int intensity) {
         this.id = id;
-        this.intensity = intensity;
+        this.eventType = intensity;
     }
 
     public Long getId() {
@@ -26,11 +26,13 @@ public class SensorData {
         this.id = id;
     }
 
-    public int getIntensity() {
-        return intensity;
+    public int getEventType() {
+        return eventType;
     }
 
-    public void setIntensity(int intensity) {
-        this.intensity = intensity;
+    public void setEventType(int eventType) {
+        this.eventType = eventType;
     }
+
+    public
 }

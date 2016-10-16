@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    compile 'com.getpebble:pebblekit:3.1.0@aar'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -49,4 +50,5 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.5'
     compile 'com.google.dagger:dagger:2.5'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
