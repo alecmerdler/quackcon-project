@@ -11,9 +11,6 @@ import android.widget.Switch;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.quackcon.project.R;
-import com.quackcon.project.engage.EngageContract;
-import com.quackcon.project.engage.EngagePresenter;
-import com.quackcon.project.engage.EventGridAdapter;
 import com.quackcon.project.models.Event;
 import com.quackcon.project.services.EventServiceMock;
 import com.quackcon.project.services.SensorDataServiceMQTT;
@@ -39,11 +36,12 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        pebbleUUID = UUID.fromString("34b52074-c2a6-4f57-ad53-9d805536492c");
+        pebbleUUID = UUID.fromString("4e4019bf-b50e-4ff4-9e05-441edb18bc70");
         eventGridView = (GridView) findViewById(R.id.events_gridview);
         togglePebble = (Switch) findViewById(R.id.toggle_vibrate_pebble);
         togglePhone = (Switch) findViewById(R.id.toggle_vibrate_phone);
         context = this;
+        setEventListeners();
         presenter = new EngagePresenter(this,
                                         new SensorDataServiceMQTT(),
                                         new EventServiceMock(),
@@ -63,7 +61,7 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     public void vibrate(int eventType) {
         if (isPhoneEnabled) {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(new long[] {0, 500}, -1);
+            vibrator.vibrate(getPattern(eventType), -1);
         }
         if (isPebbleEnabled) {
             messagePebble(eventType);
@@ -73,16 +71,43 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     private void messagePebble(int eventType) {
         boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
         PebbleDictionary dictionary = new PebbleDictionary();
-        dictionary.addInt32(1, eventType);
+        dictionary.addInt32(0, eventType);
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
     }
 
     private void setEventListeners() {
+        isPhoneEnabled = true;
+        isPebbleEnabled = true;
         togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPebbleEnabled = isChecked;
         });
-        togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+        togglePhone.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPhoneEnabled = isChecked;
         });
+    }
+
+    private long[] getPattern(int eventType) {
+        long[] pattern = null;
+        switch (eventType) {
+            case 0:
+                pattern = new long[] {0, 250};
+                break;
+            case 1:
+                pattern = new long[] {0, 150, 75, 150};
+                break;
+            case 2:
+                pattern = new long[] {0, 150, 75, 150, 75, 150};
+                break;
+            case 3:
+                pattern = new long[] {0, 150, 75, 150, 75, 150, 75, 150};
+                break;
+            case 4:
+                pattern = new long[] {0, 500, 200, 500, 200, 500, 200, 500};
+                break;
+            default:
+                break;
+        }
+
+        return pattern;
     }
 }
