@@ -1,13 +1,16 @@
-package com.quackcon.project;
+package com.quackcon.project.engage;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.Switch;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.quackcon.project.R;
 import com.quackcon.project.engage.EngageContract;
 import com.quackcon.project.engage.EngagePresenter;
 import com.quackcon.project.engage.EventGridAdapter;
@@ -27,6 +30,10 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     private EngageContract.Presenter presenter;
     private GridView eventGridView;
     private UUID pebbleUUID;
+    private Switch togglePebble;
+    private Switch togglePhone;
+    private boolean isPhoneEnabled;
+    private boolean isPebbleEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,8 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         setContentView(R.layout.activity_main);
         pebbleUUID = UUID.fromString("34b52074-c2a6-4f57-ad53-9d805536492c");
         eventGridView = (GridView) findViewById(R.id.events_gridview);
+        togglePebble = (Switch) findViewById(R.id.toggle_vibrate_pebble);
+        togglePhone = (Switch) findViewById(R.id.toggle_vibrate_phone);
         context = this;
         presenter = new EngagePresenter(this,
                                         new SensorDataServiceMQTT(),
@@ -49,11 +58,16 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         eventGridView.setAdapter(new EventGridAdapter(context, events));
     }
 
+
     @Override
     public void vibrate(int eventType) {
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(new long[] {0, 500}, -1);
-        messagePebble(eventType);
+        if (isPhoneEnabled) {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(new long[] {0, 500}, -1);
+        }
+        if (isPebbleEnabled) {
+            messagePebble(eventType);
+        }
     }
 
     private void messagePebble(int eventType) {
@@ -61,5 +75,14 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         PebbleDictionary dictionary = new PebbleDictionary();
         dictionary.addInt32(1, eventType);
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
+    }
+
+    private void setEventListeners() {
+        togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+            isPebbleEnabled = isChecked;
+        });
+        togglePebble.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+            isPhoneEnabled = isChecked;
+        });
     }
 }
