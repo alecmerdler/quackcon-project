@@ -1,12 +1,17 @@
 package com.quackcon.project.engage;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
@@ -75,6 +80,20 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
     }
 
+    private void enableDialog(CharSequence[] options) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setMultiChoiceItems(options, new boolean[options.length], new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+            }
+        });
+
+        adb.setNegativeButton("Cancel", null);
+        adb.setTitle("Selection");
+        adb.show();
+    }
+
     private void setEventListeners() {
         isPhoneEnabled = true;
         isPebbleEnabled = true;
@@ -83,6 +102,34 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
         });
         togglePhone.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             isPhoneEnabled = isChecked;
+        });
+        eventGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                switch (position){
+                    case 0:
+                        enableDialog(new CharSequence[] {"Batting", "Catching", "Home Runs"});
+                        break;
+                    case 1:
+                        enableDialog(new CharSequence[] {"Hitting", "Touchdown"});
+                        break;
+                    case 2:
+                        enableDialog(new CharSequence[] {"Hitting", "Scoring", "Saves"});
+                        break;
+                    case 3:
+                        enableDialog(new CharSequence[] {"Scoring", "Goal Post"});
+                        break;
+                }
+
+
+
+
+
+                //   parent.getItemAtPosition(position);
+                // DO something
+
+            }
         });
     }
 
