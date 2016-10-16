@@ -61,7 +61,7 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     public void vibrate(int eventType) {
         if (isPhoneEnabled) {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(new long[] {0, 500}, -1);
+            vibrator.vibrate(getPattern(eventType), -1);
         }
         if (isPebbleEnabled) {
             messagePebble(eventType);
@@ -87,6 +87,27 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     }
 
     private long[] getPattern(int eventType) {
-        return null;
+        long[] pattern = null;
+        switch (eventType) {
+            case 0:
+                pattern = new long[] {0, 250};
+                break;
+            case 1:
+                pattern = new long[] {0, 150, 75, 150};
+                break;
+            case 2:
+                pattern = new long[] {0, 150, 75, 150, 75, 150};
+                break;
+            case 3:
+                pattern = new long[] {0, 150, 75, 150, 75, 150, 75, 150};
+                break;
+            case 4:
+                pattern = new long[] {0, 500, 200, 500, 200, 500, 200, 500};
+                break;
+            default:
+                break;
+        }
+
+        return pattern;
     }
 }
