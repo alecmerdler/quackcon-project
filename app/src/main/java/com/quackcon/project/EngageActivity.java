@@ -26,11 +26,13 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     private Context context;
     private EngageContract.Presenter presenter;
     private GridView eventGridView;
+    private UUID pebbleUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pebbleUUID = UUID.fromString("34b52074-c2a6-4f57-ad53-9d805536492c");
         eventGridView = (GridView) findViewById(R.id.events_gridview);
         context = this;
         presenter = new EngagePresenter(this,
@@ -48,17 +50,16 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     }
 
     @Override
-    public void vibrate(int intensity) {
+    public void vibrate(int eventType) {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(new long[] {0, 500}, -1);
-        messagePebble();
+        messagePebble(eventType);
     }
 
-    private void messagePebble() {
+    private void messagePebble(int eventType) {
         boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
         PebbleDictionary dictionary = new PebbleDictionary();
-        dictionary.addInt32(1, 1);
-        final UUID pebbleUUID = UUID.fromString("34b52074-c2a6-4f57-ad53-9d805536492c");
+        dictionary.addInt32(1, eventType);
         PebbleKit.sendDataToPebble(getApplicationContext(), pebbleUUID, dictionary);
     }
 }

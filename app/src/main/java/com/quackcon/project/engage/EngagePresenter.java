@@ -46,7 +46,7 @@ public class EngagePresenter implements EngageContract.Presenter {
                 .subscribeOn(ioScheduler)
                 .observeOn(mainThreadScheduler)
                 .subscribe((SensorData sensorData) -> {
-                    view.vibrate(sensorData.getIntensity());
+                    view.vibrate(sensorData.getEventType());
                 });
     }
 }
