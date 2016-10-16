@@ -36,9 +36,7 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     @Override
     public void vibrate(int intensity) {
         Vibrator mVib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-        final int lclIntnsty = intensity *= 10;
-        mVib.vibrate(new long[] {(100 - lclIntnsty), lclIntnsty}, -1);
+        mVib.vibrate(new long[] {0, 500}, -1);
         messagePebble();
     }
 

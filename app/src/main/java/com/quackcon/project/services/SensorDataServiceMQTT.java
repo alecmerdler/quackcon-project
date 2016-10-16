@@ -23,6 +23,7 @@ import rx.Subscriber;
 public class SensorDataServiceMQTT implements SensorDataService {
 
     private final String brokerUrl = "tcp://52.25.184.170:1883";
+//    private final String brokerUrl = "tcp://engageability.net:1883";
     private final String sensorDataTopic = "sensorData";
     private String clientId = UUID.randomUUID().toString();
     private IMqttClient client;
@@ -75,8 +76,10 @@ public class SensorDataServiceMQTT implements SensorDataService {
             try {
                 byte[] bytes = message.getPayload();
                 SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-                Thread.sleep(500);
-                subscriber.onNext(sensorData);
+                if(sensorData.getIntensity() == 1) {
+                    subscriber.onNext(sensorData);
+                    Thread.sleep(500);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
