@@ -143,14 +143,6 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
                         enableDialog(new CharSequence[] {"Scoring", "Goal Post"});
                         break;
                 }
-
-
-
-
-
-                //   parent.getItemAtPosition(position);
-                // DO something
-
             }
         });
     }

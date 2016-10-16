@@ -8,6 +8,7 @@ import com.quackcon.project.services.SensorDataService;
 import java.util.List;
 
 import rx.Scheduler;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by alec on 10/15/16.
@@ -43,6 +44,13 @@ public class EngagePresenter implements EngageContract.Presenter {
     @Override
     public void initializeDataStreams() {
         sensorDataService.getAllSensorData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(mainThreadScheduler)
+                .subscribe((SensorData sensorData) -> {
+                    view.vibrate(sensorData.getEventType());
+                });
+        // FIXME: This is bad
+        sensorDataService.getAllSensorData2()
                 .subscribeOn(ioScheduler)
                 .observeOn(mainThreadScheduler)
                 .subscribe((SensorData sensorData) -> {

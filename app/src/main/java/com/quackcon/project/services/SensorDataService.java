@@ -9,4 +9,5 @@ import com.quackcon.project.models.SensorData;
 public interface SensorDataService {
 
     rx.Observable<SensorData> getAllSensorData();
+    rx.Observable<SensorData> getAllSensorData2();
 }

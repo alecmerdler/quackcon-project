@@ -22,22 +22,26 @@ import rx.Subscriber;
 
 public class SensorDataServiceMQTT implements SensorDataService {
 
-    private final String brokerUrl = "tcp://52.25.184.170:1884";
+    private final String brokerUrl1 = "tcp://52.25.184.170:1884";
+    private final String brokerUrl2 = "tcp://52.25.184.170:1883";
     private final String sensorDataTopic = "sensorData";
     private String clientId = UUID.randomUUID().toString();
-    private IMqttClient client;
+    private String clientId2 = UUID.randomUUID().toString();
+    private IMqttClient client1;
+    private IMqttClient client2;
     private MemoryPersistence persistence;
 
     // TODO: Dependency injection
     public SensorDataServiceMQTT(IMqttClient client, MemoryPersistence persistence) {
-        this.client = client;
+        this.client1 = client;
         this.persistence = persistence;
     }
 
     public SensorDataServiceMQTT() {
         this.persistence = new MemoryPersistence();
         try {
-            this.client = new MqttClient(brokerUrl, clientId, persistence);
+            this.client1 = new MqttClient(brokerUrl1, clientId, persistence);
+            this.client2 = new MqttClient(brokerUrl2, clientId2, persistence);
         } catch (MqttException me) {
             me.printStackTrace();
         }
@@ -46,13 +50,25 @@ public class SensorDataServiceMQTT implements SensorDataService {
     public Observable<SensorData> getAllSensorData() {
         return Observable.create((Subscriber<? super SensorData> subscriber) -> {
                 try {
-                    client.setCallback(new SubscribeCallback(subscriber));
-                    client.connect();
-                    client.subscribe(sensorDataTopic + "/#");
+                    client1.setCallback(new SubscribeCallback(subscriber));
+                    client1.connect();
+                    client1.subscribe(sensorDataTopic + "/#");
                 } catch (MqttException me) {
                     me.printStackTrace();
                 }
             });
+    }
+
+    public Observable<SensorData> getAllSensorData2() {
+        return Observable.create((Subscriber<? super SensorData> subscriber) -> {
+            try {
+                client2.setCallback(new SubscribeCallback(subscriber));
+                client2.connect();
+                client2.subscribe(sensorDataTopic + "/#");
+            } catch (MqttException me) {
+                me.printStackTrace();
+            }
+        });
     }
 
     private class SubscribeCallback implements MqttCallback {
@@ -75,7 +91,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
             try {
                 byte[] bytes = message.getPayload();
                 SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-                if(sensorData.getEventType() >= 0 && sensorData.getEventType() < 4) {
+                if(sensorData.getEventType() >= 0 && sensorData.getEventType() < 5) {
                     subscriber.onNext(sensorData);
                     Thread.sleep(500);
                 }
