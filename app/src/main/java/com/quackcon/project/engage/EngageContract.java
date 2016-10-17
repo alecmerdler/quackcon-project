@@ -14,7 +14,7 @@ public interface EngageContract {
 
         void showEvents(List<Event> events);
 
-        void vibrate(int intensity);
+        void vibrate(long[] pattern);
     }
 
     interface Presenter {

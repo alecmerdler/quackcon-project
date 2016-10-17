@@ -33,4 +33,29 @@ public class SensorData {
     public void setEventType(int eventType) {
         this.eventType = eventType;
     }
+
+    public long[] getPattern() {
+        long[] pattern = null;
+        switch (eventType) {
+            case 0:
+                pattern = new long[] {0, 250};
+                break;
+            case 1:
+                pattern = new long[] {0, 150, 75, 150};
+                break;
+            case 2:
+                pattern = new long[] {0, 150, 75, 150, 75, 150};
+                break;
+            case 3:
+                pattern = new long[] {0, 150, 75, 150, 75, 150, 75, 150};
+                break;
+            case 4:
+                pattern = new long[] {0, 500, 200, 500, 200, 500, 200, 500};
+                break;
+            default:
+                break;
+        }
+
+        return pattern;
+    }
 }
