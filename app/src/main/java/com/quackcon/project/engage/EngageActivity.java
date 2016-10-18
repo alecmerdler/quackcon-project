@@ -41,6 +41,7 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // FIXME: Acquire Pebble ID programmatically
         pebbleUUID = UUID.fromString("4e4019bf-b50e-4ff4-9e05-441edb18bc70");
         eventGridView = (GridView) findViewById(R.id.events_gridview);
         togglePebble = (Switch) findViewById(R.id.toggle_vibrate_pebble);
@@ -60,7 +61,6 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     public void showEvents(List<Event> events) {
         eventGridView.setAdapter(new EventGridAdapter(context, events));
     }
-
 
     @Override
     public void vibrate(long[] pattern) {

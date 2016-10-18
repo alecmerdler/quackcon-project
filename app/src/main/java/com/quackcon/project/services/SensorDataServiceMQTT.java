@@ -48,7 +48,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
                 try {
                     client.setCallback(new SubscribeCallback(subscriber));
                     client.connect();
-                    client.subscribe(sensorDataTopic + "/#");
+                    client.subscribe(sensorDataTopic);
                 } catch (MqttException me) {
                     me.printStackTrace();
                 }
