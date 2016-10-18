@@ -75,9 +75,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
             try {
                 byte[] bytes = message.getPayload();
                 SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-                if (sensorData.getEventType() >= 0 && sensorData.getEventType() < 4) {
-                    subscriber.onNext(sensorData);
-                }
+                subscriber.onNext(sensorData);
             } catch (Exception e) {
                 e.printStackTrace();
             }

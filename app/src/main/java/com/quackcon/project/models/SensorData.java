@@ -35,7 +35,7 @@ public class SensorData {
     }
 
     public long[] getPattern() {
-        long[] pattern = null;
+        final long[] pattern;
         switch (eventType) {
             case 0:
                 pattern = new long[] {0, 250};
@@ -53,6 +53,7 @@ public class SensorData {
                 pattern = new long[] {0, 500, 200, 500, 200, 500, 200, 500};
                 break;
             default:
+                pattern = new long[] {0};
                 break;
         }
 
