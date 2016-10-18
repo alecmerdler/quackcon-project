@@ -24,11 +24,11 @@ public class SensorDataServiceMQTT implements SensorDataService {
 
     private final String brokerUrl = "tcp://52.25.184.170:1884";
     private final String sensorDataTopic = "sensorData";
-    private String clientId = UUID.randomUUID().toString();
+    private final String clientId = UUID.randomUUID().toString();
     private IMqttClient client;
     private MemoryPersistence persistence;
 
-    // TODO: Dependency injection
+    // TODO: Use dependency injection
     public SensorDataServiceMQTT(IMqttClient client, MemoryPersistence persistence) {
         this.client = client;
         this.persistence = persistence;
@@ -44,7 +44,7 @@ public class SensorDataServiceMQTT implements SensorDataService {
     }
 
     public Observable<SensorData> getAllSensorData() {
-        return Observable.create((Subscriber<? super SensorData> subscriber) -> {
+        return Observable.create((subscriber) -> {
                 try {
                     client.setCallback(new SubscribeCallback(subscriber));
                     client.connect();
@@ -58,11 +58,11 @@ public class SensorDataServiceMQTT implements SensorDataService {
     private class SubscribeCallback implements MqttCallback {
 
         private Subscriber<? super SensorData> subscriber;
-        // FIXME: Use dependency injection
-        private ObjectMapper objectMapper = new ObjectMapper();
+        private ObjectMapper objectMapper;
 
         SubscribeCallback(Subscriber<? super SensorData> subscriber) {
             this.subscriber = subscriber;
+            this.objectMapper = new ObjectMapper();
         }
 
         @Override
@@ -75,9 +75,8 @@ public class SensorDataServiceMQTT implements SensorDataService {
             try {
                 byte[] bytes = message.getPayload();
                 SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-                if(sensorData.getEventType() >= 0 && sensorData.getEventType() < 4) {
+                if (sensorData.getEventType() >= 0 && sensorData.getEventType() < 4) {
                     subscriber.onNext(sensorData);
-                    Thread.sleep(500);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
