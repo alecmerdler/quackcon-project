@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">EngageAble</string>
-    <string name="toggle_vibrate_pebble">Enable Pebble</string>
-    <string name="toggle_vibrate_phone">Enable Phone</string>
+    <string name="toggle.vibrate.pebble">Enable Pebble</string>
+    <string name="toggle.vibrate.phone">Enable Phone</string>
+    <string name="event.specific.select.prompt">Select events to receive</string>
+    <string name="common.okay">Okay</string>
+    <string name="common.cancel">Cancel</string>
 </resources>

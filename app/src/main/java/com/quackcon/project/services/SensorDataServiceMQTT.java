@@ -22,6 +22,7 @@ import rx.Subscriber;
 
 public class SensorDataServiceMQTT implements SensorDataService {
 
+    // TODO: Move to configuration file
     private final String brokerUrl = "tcp://52.25.184.170:1884";
     private final String sensorDataTopic = "sensorData";
     private final String clientId = UUID.randomUUID().toString();
@@ -55,35 +56,35 @@ public class SensorDataServiceMQTT implements SensorDataService {
             });
     }
 
-    private class SubscribeCallback implements MqttCallback {
+        private class SubscribeCallback implements MqttCallback {
 
-        private Subscriber<? super SensorData> subscriber;
-        private ObjectMapper objectMapper;
+            private Subscriber<? super SensorData> subscriber;
+            private ObjectMapper objectMapper;
 
-        SubscribeCallback(Subscriber<? super SensorData> subscriber) {
-            this.subscriber = subscriber;
-            this.objectMapper = new ObjectMapper();
-        }
+            SubscribeCallback(Subscriber<? super SensorData> subscriber) {
+                this.subscriber = subscriber;
+                this.objectMapper = new ObjectMapper();
+            }
 
-        @Override
-        public void connectionLost(Throwable cause) {
+            @Override
+            public void connectionLost(Throwable cause) {
 
-        }
+            }
 
-        @Override
-        public void messageArrived(String topic, MqttMessage message) {
-            try {
-                byte[] bytes = message.getPayload();
-                SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
-                subscriber.onNext(sensorData);
-            } catch (Exception e) {
-                e.printStackTrace();
+            @Override
+            public void messageArrived(String topic, MqttMessage message) {
+                try {
+                    byte[] bytes = message.getPayload();
+                    SensorData sensorData = objectMapper.readValue(message.getPayload(), SensorData.class);
+                    subscriber.onNext(sensorData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
             }
         }
-
-        @Override
-        public void deliveryComplete(IMqttDeliveryToken token) {
-
-        }
-    }
 }

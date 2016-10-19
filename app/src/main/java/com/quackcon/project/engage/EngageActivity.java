@@ -82,9 +82,9 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
     private void enableDialog(CharSequence[] options) {
         new AlertDialog.Builder(this)
                 .setMultiChoiceItems(options, new boolean[options.length], (DialogInterface dialog, int which, boolean isChecked) -> {})
-                .setNegativeButton("Cancel", null)
-                .setTitle("Selection")
-                .setPositiveButton("Okay", null)
+                .setNegativeButton(R.string.common_cancel, null)
+                .setPositiveButton(R.string.common_okay, null)
+                .setTitle(R.string.event_specific_select_prompt)
                 .show();
     }
 
@@ -119,6 +119,12 @@ public class EngageActivity extends AppCompatActivity implements EngageContract.
                         break;
                     case 3:
                         enableDialog(new CharSequence[] {"Scoring", "Goal Post"});
+                        break;
+                    case 4:
+                        enableDialog(new CharSequence[] {"Hit"});
+                        break;
+                    case 5:
+                        enableDialog(new CharSequence[] {"Goal", "Block", "Penalty"});
                         break;
                 }
         });

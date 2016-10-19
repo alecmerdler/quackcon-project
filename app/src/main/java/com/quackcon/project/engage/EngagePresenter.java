@@ -21,7 +21,6 @@ public class EngagePresenter implements EngageContract.Presenter {
     private final Scheduler ioScheduler;
     private final Scheduler mainThreadScheduler;
 
-    // TODO: Use dependency injection
     public EngagePresenter(EngageContract.View view,
                            SensorDataService sensorDataService,
                            EventService eventService,

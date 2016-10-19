@@ -27,9 +27,9 @@ public class EventGridAdapter extends ArrayAdapter<Event> {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(getContext());
-            imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
+            imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(8, 4, 8, 4);
         } else {
             imageView = (ImageView) convertView;
         }
